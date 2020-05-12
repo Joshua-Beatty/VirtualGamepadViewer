@@ -20,12 +20,6 @@ def quit():
 	pygame.quit()
 	sys.exit()
 
-def loadDefaultSkin(bg, path):
-	path = os.getcwd() + "\\Skins\\NES"
-	pickle.dump(path, open( "save.p", "wb" ) )
-	bg = pygame.image.load(path + '/background.png')
-
-
 #Main Loop
 while True:
 	#initializer Pygame, this will reset pygame when switching skings
@@ -37,7 +31,6 @@ while True:
 
 
 	#Loading a skin
-
 	try:
 		#skin directory is stored in pickle attempt to open
 		path = pickle.load(open("save.p", "rb"))
@@ -45,13 +38,14 @@ while True:
 		bg = pygame.image.load(path + '/background.png')
 
 	#If there is no saved pickle load the NES skin by default
-	except OSError as e:
-		loadDefaultSkin(bg, path)
+	except (FileNotFoundError, NameError) as e:
+		path = os.getcwd() + "\\Skins\\NES"
+		pickle.dump(path, open( "save.p", "wb" ) )
+		bg = pygame.image.load(path + '/background.png')
 
 	#if both of these fail ask the user to select a new directory	
 	#if this is a restart "restarting" will be appended to the start of the path bringing you here after a type error
 	except pygame.error as e:
-		print("test")
 		#save previous path
 		if(path.startswith("restarting")):
 			oldPath = path[10:]
@@ -73,7 +67,9 @@ while True:
 		except pygame.error as e:
 			#alert the user that they have chosen a bad directory and close the program
 			messagebox.showinfo("Error", "Bad Directory: Couldn't find background.png\nLoading NES Skin")
-			loadDefaultSkin(bg, path)
+			path = os.getcwd() + "\\Skins\\NES"
+			pickle.dump(path, open( "save.p", "wb" ) )
+			bg = pygame.image.load(path + '/background.png')
 
 	#Set up the main window
 	mainDisplay = pygame.display.set_mode(bg.get_size())

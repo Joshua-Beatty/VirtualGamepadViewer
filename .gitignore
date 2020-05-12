@@ -1,6 +1,7 @@
 #project specific
 save.p
 build/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

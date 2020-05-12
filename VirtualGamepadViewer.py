@@ -60,7 +60,7 @@ while True:
 
 	#Set up the main window
 	mainDisplay = pygame.display.set_mode(bg.get_size())
-	pygame.display.set_caption('Gamepad Visualizer')
+	pygame.display.set_caption('Virtual Gamepad Viewer')
 
 	bg = bg.convert()
 	mainDisplay.blit(bg, (0,0))

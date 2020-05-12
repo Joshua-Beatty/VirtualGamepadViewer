@@ -10,12 +10,12 @@ base = 'Win32GUI' if sys.platform=='win32' else None
 
 
 executables = [
-Executable('GamepadVisualizer.py',
+Executable('VirtualGamepadViewer.py',
 	base=base,
 	icon="icon.ico")
 ]
 
-setup(name='Gamepad Visualizer',
+setup(name='Virtual Gamepad Viewer',
 	version = '1.0',
 	description = '',
 	options = dict(build_exe = buildOptions),

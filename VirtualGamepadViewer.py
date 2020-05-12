@@ -32,19 +32,31 @@ while True:
 
 
 	#Loading a skin
+
 	try:
 		#skin directory is stored in pickle attempt to open
 		path = pickle.load(open("save.p", "rb"))
 		#attempt to load the background image
 		bg = pygame.image.load(path + '/background.png')
 
-	#if either of these fail ask the user to select a new directory	
-	except (OSError, IOError, pygame.error, TypeError) as e:
-		#Get the current skins directory
+	#If there is no saved pickle load the NES skin by default
+	except OSError as e:
+		path = os.getcwd() + "\\Skins\\NES\\"
+		bg = pygame.image.load(path + '/background.png')
+
+	#if both of these fail ask the user to select a new directory	
+	#if this is a restart "restarting" will be appended to the start of the path bringing you here after a type error
+	except pygame.error as e:
+		#save previous path
+		if(path.startswith("restarting")):
+			oldPath = path[10:]
+
+		#Ask directory
 		tempPath = filedialog.askdirectory(initialdir=os.getcwd() + "\\Skins\\",)
+
 		#if they click cancel close the program
 		if(tempPath is  ""):
-			path = os.getcwd() + "\\Skins\\NES\\"
+			path = oldPath
 		else:
 			path = tempPath
 			
@@ -53,10 +65,11 @@ while True:
 		try:
 			#attempt again to load background
 			bg = pygame.image.load(path + '/background.png')
-		except (OSError, IOError, pygame.error) as e:
+		except pygame.error as e:
 			#alert the user that they have chosen a bad directory and close the program
-			messagebox.showinfo("Error", "Bad Directory: Couldn't find background.png")
-			quit()
+			messagebox.showinfo("Error", "Bad Directory: Couldn't find background.png\nLoading NES Skin")
+			path = os.getcwd() + "\\Skins\\NES\\"
+			bg = pygame.image.load(path + '/background.png')
 
 	#Set up the main window
 	mainDisplay = pygame.display.set_mode(bg.get_size())
@@ -150,10 +163,11 @@ while True:
 			if event.type == pygame.MOUSEBUTTONUP:
 				#chose new skin on right click
 				if event.button == 3:
-					#set path to none and overwrite current pickle
+					#append the term restarting to path to make it an invalid path
 					#this will cause a type error on restart
 					#which will bring up the choose directory dialouge
-					path = None
+
+					path = "restarting" + path
 					pickle.dump(path, open( "save.p", "wb" ) )
 					restarting = True
 

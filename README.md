@@ -29,7 +29,7 @@ Then run
 ## Usage
 Right click on the screen to select a new a skin
 
-Left click on the screen to enable printing of every currently pressed keycode 
+Middle click on the screen to enable printing of every currently pressed keycode 
 for the use of debugging/creating new skins
 
 ### Skins

@@ -172,5 +172,5 @@ while True:
 					restarting = True
 
 				#on left cklick toggle printing keycodes
-				if event.button == 1:
+				if event.button == 2:
 					printingCodes = not printingCodes

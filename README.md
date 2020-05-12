@@ -1,4 +1,4 @@
-# Gamepad Visualizer
+# Virtual Gamepad Viewer
 Monitors keyboard inputs and visualizes a virtual gamepad for stream overlays
 
 ## Getting started
@@ -7,12 +7,12 @@ Needed python libraries run GamepadVisualizer.py:
 
 
 
-To run the GamepadVisualizer python script do
+To run the VirtualGamepadViewer python script do
 ```bash
-python GamepadVisualizer.py
+python VirtualGamepadViewer.py
 ```
 ### To build
-Needed python libraries to build GamepadVisualizer.py:
+Needed python libraries to build VirtualGamepadViewer.py:
 > os, sys, glob, pickle, tkinter, pygame, keyboard, cx_Freeze
 
 Build the program using the included build.py
@@ -24,7 +24,7 @@ This will build to
 > ./build/name-of-build-type/
 
 Then run 
-> GamepadVisualizer.exe
+> VirtualGamepadViewer.exe
 
 ## Usage
 Right click on the screen to select a new a skin
@@ -63,4 +63,4 @@ Either delete the save.p file and relaunch or modify the background.png file and
 If you want keycodes (1 or 2) and 3 to be pressed, you must distribute the and so the file name would be
 > 1+3-2+3.png
 ## License
-[GNU General Public License v3.0](./LICENSE)
+[Polyform Noncommercial License 1.0.0](./LICENSE)

@@ -66,7 +66,7 @@ Will be displayed if either the `A` button is being held down or the `S` button 
 Either delete the save.p file and relaunch or modify the background.png file and relaunch.
 
 #### I want my skin to be able to show only if X is pressed and then if either Y or Z is pressed
-If you want keycodes (1 or 2) and 3 to be pressed, you must distribute the and so the file name would be
+If you want keycodes (1 or 2) and 3 to be pressed, you must distribute the `and` so the file name would be
 > 1+3-2+3.png
 ## License
 [Polyform Noncommercial License 1.0.0](./LICENSE)

@@ -120,7 +120,7 @@ while True:
 
 			#add this to to the keysToBePressedSanitized list, ignore empty
 			if(keyCodesToBePressedTemp != []):
-				keysToBePressedSanitized.append(keycodesToBePressedTemp)
+				keysToBePressedSanitized.append(keyCodesToBePressedTemp)
 
 		#create an image object to be stored in images, ignore if keys to activate are empty
 		if(keysToBePressedSanitized != []):

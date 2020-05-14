@@ -85,26 +85,47 @@ while True:
 	#images[0][1] will be the pygame image object
 	images = []
 
+	#Iintialize the boolean and font for showing keycode
+	printingCodes = False
+
+	#Initalize font for printed keycodes
+	font = pygame.font.Font(pygame.font.get_default_font(), int(bg.get_rect().size[1]/6))
+
+	#Initalize clock this will limit the framerate
+	clock = pygame.time.Clock();
+
+	#this bool handles restarting of program
+	restarting = False
+
 	#search for every png file in the chose directory
 	for file in glob.glob(path + "/*.png"):
 		#remove the file extensions and parse into nested array
 		#"37-37+38-35" -> [[37],[37,38],[35]]
 		keysToBePressed = file[len(path)+1:-4].split("-")
 		keysToBePressed = [i.split("+") for i in keysToBePressed] 
-		try:
-			#try and conver each str to an int, which will be the keycode to show the image
-			keysCodesToBePressed = [list(map(int, i)) for i in keysToBePressed]
-			#if this suceeds load the coresponding image and add it to the list
-			tempObj = [keysCodesToBePressed, pygame.image.load(file).convert_alpha()]
-			images.append(tempObj)
-		except(ValueError):
-			#this is incase there are any improperly formatted images
-			#background.png will also trigger this but this is intended
-			pass
 
-	#Iintialize the boolean and font for showing keycode
-	printingCodes = False
-	font = pygame.font.Font(pygame.font.get_default_font(), int(bg.get_rect().size[1]/6))
+		#create empty array for for the keycodes that will activate an image
+		keysToBePressedSanitized = []
+
+		for codes in keysToBePressed:
+			keyCodesToBePressedTemp = []
+			for keycode in codes:
+				try:
+					#attempt to convert it to an int
+					keyCodesToBePressedTemp.append(int(keycode))
+				except(ValueError):
+					#if this fails use it as a key name
+					if(keycode != 'background'):
+						keyCodesToBePressedTemp.append(keycode)
+
+			#add this to to the keysToBePressedSanitized list, ignore empty
+			if(keyCodesToBePressedTemp != []):
+				keysToBePressedSanitized.append(keycodesToBePressedTemp)
+
+		#create an image object to be stored in images, ignore if keys to activate are empty
+		if(keysToBePressedSanitized != []):
+			tempObj = [keysToBePressedSanitized, pygame.image.load(file).convert_alpha()]
+			images.append(tempObj)
 
 	#function that is called on a keyboard event(Key up or key down)
 	def drawImage(e):
@@ -115,13 +136,19 @@ while True:
 
 		for imageObject in images:
 			#example:
-			# imageObject[0] = [[37],[48,49]]
-			#check to see if 37 or (48 and 49) are pressed
+			#imageObject[0] = [[37],[48,49]]
+			#checks to see if 37 or (48 and 49) are pressed
 			for i in imageObject[0]:
 				pressed = True
 				for j in i:
-					if(not keyboard.is_pressed(j)):
-						pressed = False
+					try:
+						if(not keyboard.is_pressed(j)):
+							pressed = False
+					except ValueError:
+						badkeyCode = j
+						print(badkeyCode)
+						
+
 				#if any required key combo is pressed display the image
 				if(pressed):
 					mainDisplay.blit(imageObject[1], (0,0))
@@ -140,17 +167,23 @@ while True:
 	#add drawImage to the keyboard hook
 	keyboard.hook(drawImage)
 
-	
+	#Test if everykeycode is valid
+	for imageObject in images:
+		for i in imageObject[0]:
+			for j in i:
+				try:
+					keyboard.is_pressed(j)
+				except ValueError:
+					#If a keycode is not, throw an error message and switch to default
+					messagebox.showinfo("Error", "Bad Keycode \"" +j+ "\" is not a valid keycode or keyname\nCheck documentation for details\nLoading NES Skin")
+					path = os.getcwd() + "\\Skins\\NES"
+					pickle.dump(path, open( "save.p", "wb" ) )
+					#restart
+					restarting = True
 
-	#Initalize clock this will limit the framerate
-	clock = pygame.time.Clock();
-
-	#program restarts right before a new skin is selected
-	restarting = False
 	while not restarting:
 		#limit framerate to 60fps
 		clock.tick(60) 
-
 		#main pygame event loop
 		for event in pygame.event.get():
 
@@ -169,8 +202,9 @@ while True:
 
 					path = "restarting" + path
 					pickle.dump(path, open( "save.p", "wb" ) )
+					#restart
 					restarting = True
 
-				#on left cklick toggle printing keycodes
+				#on middle click toggle printing keycodes
 				if event.button == 2:
 					printingCodes = not printingCodes
